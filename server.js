@@ -12,8 +12,8 @@ app.use(cors());
 // Serve your HTML login page (put index.html in /public folder)
 app.use(express.static("public"));
 
-const BOT_TOKEN = process.env.BOT_TOKEN;     // Your bot token from @BotFather
-const JWT_SECRET = process.env.JWT_SECRET;   // Any strong secret, e.g., random 32+ chars
+const BOT_TOKEN = process.env.BOT_TOKEN; // Your bot token from @BotFather
+const JWT_SECRET = process.env.JWT_SECRET; // Any strong secret, e.g., random 32+ chars
 
 if (!BOT_TOKEN || !JWT_SECRET) {
   console.error("Error: BOT_TOKEN and JWT_SECRET must be set in .env");
