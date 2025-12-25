@@ -76,6 +76,32 @@ app.get("/auth-callback", (req, res) => {
 // Optional: old POST route agar future mein use karna ho
 app.post("/telegram-login", (req, res) => {
   // same code as before...
+  const data = req.body;
+
+  if (!data || !data.hash) {
+    return res.status(400).json({ success: false, message: "Invalid payload" });
+  }
+
+  const authDate = Number(data.auth_date);
+  const now = Math.floor(Date.now() / 1000);
+  if (now - authDate > 86400) {
+    return res.status(401).json({ success: false, message: "Auth expired" });
+  }
+
+  if (!verifyTelegram(data)) {
+    return res.status(401).json({ success: false, message: "Invalid hash" });
+  }
+
+  return res.json({
+    success: true,
+    user: {
+      id: data.id,
+      first_name: data.first_name,
+      last_name: data.last_name || "",
+      username: data.username || "",
+      photo_url: data.photo_url || ""
+    }
+  });
 });
 
 const PORT = process.env.PORT || 3000;
