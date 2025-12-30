@@ -17,27 +17,22 @@ if (!BOT_TOKEN) {
   throw new Error("❌ BOT_TOKEN missing in .env");
 }
 
-
-function verifyTelegramData(data) {  
-  const secretKey = crypto
-    .createHash("sha256")
-    .update(BOT_TOKEN)
-    .digest();
-
+function verifyTelegramData(data) {
+  const BOT_TOKEN = process.env.BOT_TOKEN;
+  const secret = crypto.createHash("sha256").update(BOT_TOKEN).digest();
+  
   const checkString = Object.keys(data)
-    .filter((key) => key !== "hash")
+    .filter(k => k !== "hash")
     .sort()
-    .map((key) => `${key}=${data[key]}`)
+    .map(k => `${k}=${data[k]}`)
     .join("\n");
 
-  const generatedHash = crypto
-    .createHmac("sha256", secretKey)
+  const hash = crypto.createHmac("sha256", secret)
     .update(checkString)
     .digest("hex");
 
-  return generatedHash === data.hash;
+  return hash === data.hash;
 }
-
 
 app.post("/auth/telegram", (req, res) => {
   const data = req.body;
