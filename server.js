@@ -11,6 +11,8 @@ app.use(cors({ origin: "*", methods: ["GET", "POST"] }));
 const BOT_TOKEN = process.env.BOT_TOKEN;
 if (!BOT_TOKEN) throw new Error("❌ BOT_TOKEN missing in .env");
 
+console.log("BOT_TOKEN:", BOT_TOKEN ? "FOUND ✅" : "MISSING ❌");
+
 // Verify Telegram login data
 function verifyTelegramData(data) {
   const secret = crypto.createHash("sha256").update(BOT_TOKEN).digest();
